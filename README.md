@@ -2,7 +2,7 @@
 Telegram机器人，开发人员的工具箱
 
 # 运行环境
-* Python3
+* Python3.5
 
 # 第三方库
 
