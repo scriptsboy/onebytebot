@@ -1,0 +1,4 @@
+此命令用于将Stickers集合打包下载
+
+使用方法：/zip setname
+例如：/zip Plumpy

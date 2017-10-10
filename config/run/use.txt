@@ -1,0 +1,4 @@
+此命令用于执行一段代码
+
+使用方法：/run language code
+例如：/run python print("Hello world!")
