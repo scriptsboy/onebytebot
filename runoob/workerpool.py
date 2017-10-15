@@ -9,7 +9,7 @@ from typing import Callable
 from .supported import table
 
 headers = {"content-type": "text/plain"}
-url = 'https://www.runoob.com/api/compile.php'
+url = 'https://m.runoob.com/api/compile.php'
 
 class WorkerPool(object):
     """
