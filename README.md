@@ -1,5 +1,10 @@
 # onebytebot
-Telegram机器人，开发人员的工具箱
+onebytebot([http://t.me/onebyte_bot](http://t.me/onebyte_bot))是基于Telegram Bot实现一个开发人员的工具箱。支持以下命令：
+* run - 运行一段代码
+* zip - 打包下载stickers集合
+* fmt - 格式化json/xml格式文件
+* info - 输出当前对话框信息
+
 
 # 运行环境
 * Python3.5
