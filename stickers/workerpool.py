@@ -49,10 +49,11 @@ class WorkerPool(object):
         self._clean = True
 
     def _download_stickers_set(self, setname: str):
-        """
+        """s
         下载stickers集合
         """
         files = []
+        emojis = []
         bot = Bot(os.environ['TELEGRAM_BOT_TOKEN'])
         sticker_set = bot.get_sticker_set(setname)
         for sticker in sticker_set.stickers: 
@@ -60,18 +61,30 @@ class WorkerPool(object):
             buffer = io.BytesIO()
             file.download(out=buffer)
             filename = os.path.basename(file.file_path)
+            _, ext = os.path.splitext(filename)
+            if ext == "":
+                filename = filename + '.webp'
             files.append((filename, buffer))
-        return files
+            emojis.append((filename, sticker.emoji))
+        return files, emojis
 
-    def _zip_stickers_set(self, files : list):
+    def _zip_stickers_set(self, files : list, emojis : list):
         """
         打包stickers为压缩文件
-        """ 
+        """
+        stickers = ''
+        for idx, pair in enumerate(emojis):
+            filename, emoji = pair
+            stickers = stickers + filename + ' ---- ' + emoji
+            if idx != len(emojis) - 1:
+                stickers = stickers + '\n'
+
         buffer = io.BytesIO()
         zip = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
         for file in files:
             filename, fileio = file
             zip.writestr(filename, fileio.getvalue())
+        zip.writestr('emojis.txt', stickers)
         zip.close()
         buffer.seek(0)
         return buffer
@@ -82,8 +95,8 @@ class WorkerPool(object):
         """
         try:
             message_id = frommsg.message_id
-            files = self._download_stickers_set(setname)
-            zipbytes = self._zip_stickers_set(files)
+            files, emojis = self._download_stickers_set(setname)
+            zipbytes = self._zip_stickers_set(files, emojis)
             bot = Bot(os.environ['TELEGRAM_BOT_TOKEN'])
             bot.send_document(frommsg.chat.id, zipbytes, setname+'.zip', 'Stickers集合压缩包', reply_to_message_id=message_id)
             return None
