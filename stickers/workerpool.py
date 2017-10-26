@@ -62,10 +62,14 @@ class WorkerPool(object):
             file.download(out=buffer)
             filename = os.path.basename(file.file_path)
             _, ext = os.path.splitext(filename)
-            if ext == "":
+            if ext == '':
                 filename = filename + '.webp'
             files.append((filename, buffer))
-            emojis.append((filename, sticker.emoji))
+            if sticker.emoji != None:
+                if len(sticker.emoji) == 1:
+                    emojis.append((filename, sticker.emoji))
+                else:
+                    emojis.append((filename, sticker.emoji[0]))
         return files, emojis
 
     def _zip_stickers_set(self, files : list, emojis : list):
